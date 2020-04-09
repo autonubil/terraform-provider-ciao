@@ -1,4 +1,4 @@
-# Terraform Privider for cioa
+# Terraform Provider for ciao
 
 [ciao](https://brotandgames.com/ciao/) is an excellent HTTP(S) status checker
 
