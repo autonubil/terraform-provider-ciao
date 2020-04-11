@@ -7,9 +7,6 @@ cache:
         - .sonar/cache
         - app/
 
-variables:
-    BASENAME: terraform-provider-ciao
-
 stages:
     - validate
     - build
@@ -27,14 +24,13 @@ build:
         export ROOT=$(pwd)
         mkdir -p app/
         mkdir -p /root/gocache
-        ls -alh
         go get .
-        GOCACHE=${ROOT}/gocache CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -linkmode=external -v -X main.Version=${CI_COMMIT_REF_NAME} -X main.BuildDate=$(date --iso-8601=seconds) -X main.Commit=$CI_COMMIT_SHA -s" -a -v -o ${ROOT}/${BASENAME} main.go
-        upx ${ROOT}/${BASENAME}
-        nexus_publish_artifact.sh ${ROOT}/${BASENAME} terraform/linux/amd64/${BASENAME}
+        GOCACHE=${ROOT}/gocache CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -linkmode=external -v -X main.Version=${CI_COMMIT_REF_NAME} -X main.BuildDate=$(date --iso-8601=seconds) -X main.Commit=$CI_COMMIT_SHA -s" -v -o ${ROOT}/${CI_PROJECT_NAME} main.go
+        upx ${ROOT}/${CI_PROJECT_NAME}
+        nexus_publish_artifact.sh ${ROOT}/${CI_PROJECT_NAME} terraform/${CI_PROJECT_NAME}/linux/amd64
     artifacts:
       paths:
-      - ${BASENAME}
+      - ${CI_PROJECT_NAME}
     only:
       - master
 
@@ -45,14 +41,13 @@ build_linux_release:
         export ROOT=$(pwd)
         mkdir -p app/
         mkdir -p /root/gocache
-        ls -alh
         go get .
-        GOCACHE=${ROOT}/gocache CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -linkmode=external -v -X main.Version=${CI_COMMIT_REF_NAME} -X main.BuildDate=$(date --iso-8601=seconds) -X main.Commit=$CI_COMMIT_SHA -s" -a -v -o ${ROOT}/${BASENAME}_${CI_COMMIT_REF_NAME} main.go
-        upx ${ROOT}/${BASENAME}_${CI_COMMIT_REF_NAME}
-        nexus_publish_artifact.sh ${ROOT}/${BASENAME}_${CI_COMMIT_REF_NAME} terraform/${BASENAME}/linux/x86/${BASENAME}_${CI_COMMIT_REF_NAME}
+        GOCACHE=${ROOT}/gocache CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -linkmode=external -v -X main.Version=${CI_COMMIT_REF_NAME} -X main.BuildDate=$(date --iso-8601=seconds) -X main.Commit=$CI_COMMIT_SHA -s" -v -o ${ROOT}/${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME} main.go
+        upx ${ROOT}/${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}
+        nexus_publish_artifact.sh ${ROOT}/${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME} terraform/${CI_PROJECT_NAME}/linux/amd64
     artifacts:
       paths:
-      - ${BASENAME}_${CI_COMMIT_REF_NAME}
+      - ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}
     only:
         - tags
 
@@ -63,12 +58,12 @@ build_windows_release:
         export ROOT=$(pwd)
         mkdir -p app/
         mkdir -p /root/gocache
-        ls -alh
         go get .
-        GOCACHE=${ROOT}/gocache CGO_ENABLED=1 GOOS=windows GOARCH=amd64 CXX_FOR_TARGET=i686-w64-mingw32-g++ CC_FOR_TARGET=i686-w64-mingw32-gcc go build -ldflags "-s -w -linkmode=external -v -X main.Version=${CI_COMMIT_REF_NAME} -X main.BuildDate=$(date --iso-8601=seconds) -X main.Commit=$CI_COMMIT_SHA -s" -a -v -o ${ROOT}/${BASENAME}_${CI_COMMIT_REF_NAME}.exe main.go
-        nexus_publish_artifact.sh ${ROOT}/${BASENAME}_${CI_COMMIT_REF_NAME}.exe terraform/${BASENAME}/windows/amd64/${BASENAME}_${CI_COMMIT_REF_NAME}
+        GOCACHE=${ROOT}/gocache CGO_ENABLED=1 GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc  go build -ldflags "-s -w -linkmode=external -v -X main.Version=${CI_COMMIT_REF_NAME} -X main.BuildDate=$(date --iso-8601=seconds) -X main.Commit=$CI_COMMIT_SHA -s"  -v -o ${ROOT}/${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}.exe main.go
+        nexus_publish_artifact.sh ${ROOT}/${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}.exe terraform/${CI_PROJECT_NAME}/windows/amd64
     artifacts:
       paths:
-      - ${BASENAME}_${CI_COMMIT_REF_NAME}
+      - ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}
     only:
         - tags
+    
