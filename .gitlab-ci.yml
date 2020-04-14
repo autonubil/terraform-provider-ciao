@@ -67,3 +67,18 @@ build_windows_release:
     only:
         - tags
     
+build_darwin_release:
+    stage: build
+    script: |
+        export ROOT=$(pwd)
+        mkdir -p app/
+        mkdir -p /root/gocache
+        go get .
+        GOCACHE=${ROOT}/gocache GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w -linkmode=external -v -X main.Version=${CI_COMMIT_REF_NAME} -X main.BuildDate=$(date --iso-8601=seconds) -X main.Commit=$CI_COMMIT_SHA -s"  -v -o ${ROOT}/${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}.exe main.go
+        nexus_publish_artifact.sh ${ROOT}/${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}.exe terraform/${CI_PROJECT_NAME}/darwin/amd64
+    artifacts:
+      paths:
+      - ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}
+    only:
+        - tags
+    
