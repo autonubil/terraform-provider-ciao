@@ -37,7 +37,9 @@ func TestCheck(t *testing.T) {
                     }
                     output "check" {
                         value = ciao_check.autonubil
-                    }
+					}
+					
+					  
                 `,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("ciao_check.autonubil", "name", "autonubil"),
@@ -45,7 +47,7 @@ func TestCheck(t *testing.T) {
 			},
 			{
 				Config: ` # remove it all
-				`,
+			`,
 				Check: resource.ComposeTestCheckFunc(),
 			},
 		},

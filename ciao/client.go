@@ -80,6 +80,10 @@ func (c *Client) NewCheck(chk *Check) (*Check, error) {
 	if err != nil {
 		return nil, err
 	}
+	if response.StatusCode() > 399 {
+		return nil, fmt.Errorf("Request to ciao failed: %s", response.Status())
+	}
+
 	return response.Result().(*Check), nil
 }
 
@@ -95,6 +99,10 @@ func (c *Client) UpdateCheck(ID string, chk *Check) (*Check, error) {
 	if err != nil {
 		return nil, err
 	}
+	if response.StatusCode() > 399 {
+		return nil, fmt.Errorf("Request to ciao failed: %s", response.Status())
+	}
+
 	return response.Result().(*Check), nil
 }
 
@@ -109,16 +117,25 @@ func (c *Client) ReadCheck(ID string) (*Check, error) {
 	if err != nil {
 		return nil, err
 	}
+	if response.StatusCode() > 399 {
+		return nil, fmt.Errorf("Request to ciao failed: %s", response.Status())
+	}
 	return response.Result().(*Check), nil
 }
 
 // DeleteCheck deletes the check for a given ID
 func (c *Client) DeleteCheck(ID string) error {
-	_, err := c.client.R().
+	response, err := c.client.R().
 		SetPathParams(map[string]string{
 			"id": ID,
 		}).
 		SetResult(&Check{}).
 		Delete(fmt.Sprintf("%s/checks/{id}.json", c.baseURL))
-	return err
+	if err != nil {
+		return err
+	}
+	if response.StatusCode() > 399 {
+		return fmt.Errorf("Request to ciao failed: %s", response.Status())
+	}
+	return nil
 }

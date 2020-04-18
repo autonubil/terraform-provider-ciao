@@ -63,7 +63,7 @@ func createCheck(d *schema.ResourceData, meta interface{}) error {
 	}
 	chk, err := meta.(*Client).NewCheck(chk)
 	if err != nil {
-		return nil
+		return err
 	}
 	apply(chk, d)
 	return nil
@@ -78,7 +78,7 @@ func updateCheck(d *schema.ResourceData, meta interface{}) error {
 	}
 	chk, err := meta.(*Client).UpdateCheck(d.Id(), chk)
 	if err != nil {
-		return nil
+		return err
 	}
 	apply(chk, d)
 	return nil
@@ -94,7 +94,7 @@ func readCheck(d *schema.ResourceData, meta interface{}) error {
 	// d.GetId()
 	chk, err := meta.(*Client).ReadCheck(d.Id())
 	if err != nil {
-		return nil
+		return err
 	}
 	apply(chk, d)
 	return nil

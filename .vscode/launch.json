@@ -10,13 +10,16 @@
             "request": "launch",
             "mode": "test",
             "program": "${workspaceFolder}/ciao",
-            "env": { "TF_ACC": true,
-            "CIAO_URL": "http://127.0.0.1:8090",
-            "CIAO_USER": "admin",
-            "CIAO_PASSWORD": "2quick4u",
-            "CIAO_INSECURE": true
-        },
-            "args": ["-test.v"]
+            "env": {
+                "TF_ACC": true,
+                "CIAO_URL": "https://ciao.exanio.net",
+                "CIAO_USER": "autonubilx",
+                "CIAO_PASSWORD": "MmbcbJrWbEEW5yLXCj5P",
+                "CIAO_INSECURE": true
+            },
+            "args": [
+                "-test.v"
+            ]
         },
         {
             "name": "Launch",
