@@ -96,6 +96,11 @@ func readCheck(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
+	// not found
+	if chk == nil {
+		d.SetId("")
+		return nil
+	}
 	apply(chk, d)
 	return nil
 }

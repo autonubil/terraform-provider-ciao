@@ -1,3 +1,7 @@
+## 0.1.5 (04/18/2020)
+
+fixed incorrect 404 not found handling 
+
 ## 0.1.4 (04/18/2020)
 
 fixed error handling

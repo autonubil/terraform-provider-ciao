@@ -118,6 +118,9 @@ func (c *Client) ReadCheck(ID string) (*Check, error) {
 		return nil, err
 	}
 	if response.StatusCode() > 399 {
+		if response.StatusCode() == 404 {
+			return nil, nil
+		}
 		return nil, fmt.Errorf("Request to ciao failed: %s", response.Status())
 	}
 	return response.Result().(*Check), nil
