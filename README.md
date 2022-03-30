@@ -81,7 +81,7 @@ provider "ciao" {
 
 ```bash
 export CIAO_URL="http://127.0.0.1:8090"
-export CIAO_USER="admin"
+export CIAO_USER="admin"    
 export CIAO_PASSWORD="password"
 export CIAO_INSECURE=true
 ```
